@@ -12,7 +12,7 @@ streamlit.text('🐔 Hard-Boiled Free-Range Egg')
 streamlit.text('🥑🍞 Avocado Toast')
 
 def get_fruityvice_data(this_fruit_choice):
-    fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon" + this_fruit_choice)
+    fruityvice_response = requests.get("https://fruityvice.com/api/fruit/all" + this_fruit_choice)
     #take the json and normalize it
     fruityvice_normalize = pandas.json_normalize(fruityvice_response.json())
     return fruityvice_normalize
@@ -21,6 +21,11 @@ def get_fruit_load_list():
     with my_cnx.cursor() as my_cur:
         my_cur.execute("select * from fruit_load_list")
         return my_cur.fetchall()
+        
+def insert_row_snowflake(new_fruit):
+    with my_cnx.cursor() as my_cur:
+        my_cur.execute("insert into FRUIT_LOAD_LIST values ('" + new_fruit + "');")
+        return "Thanks for adding " + new_fruit
     
 
 my_fruit_list = pandas.read_csv("https://uni-lab-files.s3.us-west-2.amazonaws.com/dabw/fruit_macros.txt")
@@ -52,7 +57,6 @@ if streamlit.button("Get Fruit Load List"):
     streamlit.dataframe(my_data_row)
 
 # add an entry to the list
-# add_my_fruit = streamlit.text_input("What fruit would you like to add")
-# streamlit.write('Thanks for adding',add_my_fruit)
-
-# insert into FRUIT_LOAD_LIST values ('melon');
+add_my_fruit = streamlit.text_input("What fruit would you like to add")
+back_from_function = insert_row_snowflake(add_my_fruit)
+streamlit.text(back_from_function)

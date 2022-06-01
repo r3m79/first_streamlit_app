@@ -2,6 +2,7 @@ import typing_extensions
 import requests
 import streamlit
 import pandas
+import snowflake.connector
 
 streamlit.header('🍌🥭 Build Your Own Fruit Smoothie 🥝🍇')
 streamlit.text('🥣 Omega 3 & Blueberry Oatmeal')
@@ -24,7 +25,7 @@ streamlit.dataframe(fruits_to_show)
 streamlit.header('Fruityvice Fruit Advice!')
 
 fruit_choice = streamlit.text_input("What fruit would you like information about?",'Kiwi')
-streamlit.wwrite('The user entered',fruit_choice)
+streamlit.write('The user entered',fruit_choice)
 fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon" + fruit_choice)
 
 #take the json and normalize it
